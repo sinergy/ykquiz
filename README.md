@@ -5,6 +5,17 @@
 ### Q2. What is Intent? Describe three common use cases for using an Intent.
 
 ### Q3. There are scenarios in which your activity is destroyed due to normal app behavior, such as when the user presses the Back button or your activity signals its own destruction by calling finish(). Please describe how to save and restore activity state, and give a example code for this.
+```java
+@Override
+protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+}
+
+@Override
+protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    super.onRestoreInstanceState(savedInstanceState);
+}
+```
 
 ### Q4. Which dialog ui components can you use in you Android application? Please give one dialog example code to demo how to use it.
 I can use `AlertDialog`, `DatePickerDialog`, `ProgressDialog`, `TimePickerDialog` in my application. Take `AlertDialog` as an example:
@@ -25,7 +36,7 @@ For very simple data, I would pass them simply by appending them to the `Intent`
 ```java
 public static final String KEY_ID = "custom_id";
 
-Intent intent = new Intent(this.CurrentActivity, TargetActivity.class);
+Intent intent = new Intent(getApplicationContext(), TargetActivity.class);
 intent.putExtra(KEY_ID, "here the id is");
 startActivity(intent);
 ```
