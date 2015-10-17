@@ -48,15 +48,76 @@ public static final String KEY_ID = "custom_id";
 public static final String KEY_PRICE = "custom_price";
 
 Intent intent = new Intent(getApplicationContext(), TargetActivity.class);
-intent.putExtra(KEY_ID, "here the id is");
-intent.putExtra(KEY_PRICE, 1000);
+intent.putExtra(KEY_ID, "here the id is")
+      .putExtra(KEY_PRICE, 1000);
 startActivity(intent);
 ```
 
-For much more complex data structure, I would defined some custom data structure classes or POJOs which implement the `Parcelable` interface to model the data. for example:
+For much more complex data structure, I would defined some custom data structure class or POJO which implement the `Parcelable` interface to model the data. for example, a `Product` class:
 
 ```java
+public class Product implements Parcelable {
+    private String sequenceId;
+    private String name;
+    private List<String> imageUrls = new ArrayList<>();
+
+    public String getSequenceId() {
+        return sequenceId;
+    }
+
+    public void setSequenceId(String sequenceId) {
+        this.sequenceId = sequenceId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<String> getImageUrls() {
+        return imageUrls;
+    }
+
+    public void setImageUrls(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.sequenceId);
+        dest.writeString(this.name);
+        dest.writeStringList(this.imageUrls);
+    }
+
+    public Product() {}
+
+    private ProductItem(Parcel in) {
+        this.sequenceId = in.readString();
+        this.name = in.readString();
+        this.imageUrls = in.createStringArrayList();
+    }
+
+    public static final Creator<Product> CREATOR = new Creator<Product>() {
+        public Product createFromParcel(Parcel source) {
+            return new Product(source);
+        }
+
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
+}
 ```
+
+Then use the `putExtra(String name, Parcelable value)` method of `Intent` to pass it to sub-activities.
 
 ### Q6. What is Implicit Intent? and what is explicit intent
 ##### Explicit Intent
@@ -89,5 +150,6 @@ ANR is the abbreviation of "**Application Not Responding**". An ANR occurs if an
 We should attach a `PendingIntent` instance to the `Notification` object.
 
 ### Q9. What is the nine-patch Image?
+A nine-path image is an image file with `.9` extension. For example: `dialog_bg.9.png`. The image itself is composed of the original image and **extra 1px-wide black line** around each of the edge of image(rectangle).
 
 ### Q10. What is looper, message queue, and a Handler?
