@@ -147,7 +147,38 @@ if (intent.resolveActivity(getPackageManager()) != null) {
 ANR is the abbreviation of "**Application Not Responding**". An ANR occurs if an application cannot respond to user input event such as key press or screen touch event in 5 seconds or a `BroadcastReceiver` hasn't finished executing in 10 seconds.
 
 ### Q8. Your photo-sharing app displays a system notification when the user receives a photo. Your app should display the photo when the user taps the notification. Which of the following do you need to attach to the Notification object that you pass to NotificationManager?  Please give a example code for this.
-We should attach a `PendingIntent` instance to the `Notification` object.
+We should attach a `PendingIntent` instance to the `Notification` object. For example:
+```java
+public final static String MESSAGE = "message";
+public final static String PHOTO_URI = "photo_uri";
+public final static int PHOTO_VIEW_REQUEST_CODE = 101;
+public final static int PHOTO_VIEW_NOTIFICATION_ID = 201;
+
+String message = extras.getString(MESSAGE);
+String uri = extras.getString(PHOTO_URI);
+
+// Here we implement a photo viewer in out app, so call it explicitly
+Intent intent = new Intent(this, PhotoViewerActivity.class);
+intent.setData(Uri.parse(uri));
+
+TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+stackBuilder.addParentStack(PhotoViewerActivity.class);
+stackBuilder.addNextIntent(intent);
+PendingIntent pendingIntent = stackBuilder.getPendingIntent(PHOTO_VIEW_REQUEST_CODE, PendingIntent.FLAG_UPDATE_CURRENT);
+
+NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+
+builder.setSmallIcon(R.drawable.notification_icon_small)
+    .setContentTitle(getString(R.string.app_name))
+    .setContentText(message)
+    .setLargeIcon(R.drawable.notification_icon_large)
+    .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+    .setAutoCancel(true)
+    .setContentIntent(pendingIntent);
+
+notificationManager.notify(PHOTO_VIEW_NOTIFICATION_ID, builder.build());
+```
 
 ### Q9. What is the nine-patch Image?
 A nine-path image is an image file with `.9` extension. For example: `dialog_bg.9.png`. The image itself is composed of the original image and **extra 1px-wide black line** around each edge of image(rectangle). The black line at *left* and *top* define the so-called **strechable patches**. Strechable patches is the area where the system automatically use to expand vertically/horizontally to adopt the size of widget. The black line at *right* and *bottom* define the optional content area. Content area define and limit the space where our can be rendered.
