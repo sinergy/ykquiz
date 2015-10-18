@@ -1,7 +1,7 @@
 # Android Quiz
 
 ### Q1. What is a Content Provider? Please give a short example code to create, query, insert, update and delete your own content provider.
-Generally, an application can only access the data created by its own in Android for security concern. Apps cannot share data directly by using a share memory in Android. Android provides the mechanism `Content Provider` to allow app sharing its private data for other apps to access. `Content Provider` provides a standard interface that connects data in one process with code running in another process.
+Generally, an application can only access the data created by its own in Android for security concern. Apps cannot share data directly by using a shared memory in Android. Android provides the mechanism `Content Provider` to allow app sharing its private data for other apps to access. `Content Provider` provides a standard interface that connects data in one process with code running in another process.
 
 Here is the link of the sample code of my custom `WeatherContentProvider` in one of my self-training project *Sunshine* created ~1 year ago on Github: [https://goo.gl/H6iJJW](https://goo.gl/H6iJJW). I have updated the Gradle version and made some modification according to the spec of API. You are welcome to clone and run it on your own device.
 
@@ -26,11 +26,11 @@ An `Intent` is a messaging object that we could use to request an action from an
     sendBroadvast(intent);
     ```
 
-### Q3. There are scenarios in which your activity is destroyed due to normal app behavior, such as when the user presses the Back button or your activity signals its own destruction by calling finish(). Please describe how to save and restore activity state, and give a example code for this.
+### Q3. There are scenarios in which your activity is destroyed due to normal app behavior, such as when the user presses the Back button or your activity signals its own destruction by calling finish(). Please describe how to save and restore activity state, and give an example code for this.
 
-Say our app has an `SignUpActivity` to handle the process of member registration and the whole registration process has been split into 3 steps. Each step has been implemented by its corresponding `Fragment` class. When user finished the registration requirement of one step and went to the next step, we increased the `currentStep` member varaible by `1`. We save the value of `currentStep` in method `onSaveInstanceState(Bundle bundle)` and restore it in the method `onCreate(Bundle savedInstanceState)`. 
+Say our app has a `SignUpActivity` to handle the process of member registration and the whole registration process has been split into 3 steps. Each step has been implemented by its corresponding `Fragment` class. When user finished the registration requirement of one step and went to the next step, we increased the `currentStep` member variable by `1`. We save the value of `currentStep` in method `onSaveInstanceState(Bundle bundle)` and restore it in the method `onCreate(Bundle savedInstanceState)`. 
 
-Here we have another choice that we could restore the value of `currentStep` in the method `onRestoreInstanceState(Bundle savedInstanceState)`. Also, we could save the user's input of each step in `onSaveInstanceState` if we decide to use all these information as parameters of an API call at the final step of registration. By doing that, we help user keep values they input so that they have no need to input the same information again if the activity accidently destroyed because we could restore the values next time we retore this activity. However, what values (states) to save and when to restore (`onCreate()` or `onRestoreInstanceState()`) are depends on the design of the application.
+Here we have another choice that we could restore the value of `currentStep` in the method `onRestoreInstanceState(Bundle savedInstanceState)`. Also, we could save the user's input of each step in `onSaveInstanceState` if we decide to use all these information as parameters of an API call at the final step of registration. By doing that, we help the user keep values they input so that they have no need to input the same information again if the activity accidently destroyed because we could restore the values next time we restore this activity. However, what values (states) to save and when to restore (`onCreate()` or `onRestoreInstanceState()`) are depends on the design of the application.
 
 ```java
 public class SingUpActivity extends AppCompatActivity {
@@ -102,7 +102,7 @@ alertDialog.show();
 ```
 
 ### Q5. How will you pass data to sub-activities? Please give a example code for this. 
-For simple data, I would pass data simply by appending them to the instance of `Intent` directly. Simple means we only have few number of data to pass and the type of data is supported by the `putExtra` method of `Intent`.for example:
+For simple data, I would pass data simply by appending them to the instance of `Intent` directly. Simple means we only have a few number of data to pass and the type of data is supported by the `putExtra` method of `Intent`.for example:
 
 ```java
 public static final String KEY_ID = "custom_id";
@@ -114,7 +114,7 @@ intent.putExtra(KEY_ID, "here the id is")
 startActivity(intent);
 ```
 
-For much more complex data structure, I would defined some custom data structure class or POJO which implement the `Parcelable` interface to model the data. for example, a `Product` class:
+For much more complex data structure, I would define some custom data structure class or POJO which implement the `Parcelable` interface to model the data. For example, a `Product` class:
 
 ```java
 public class Product implements Parcelable {
@@ -182,7 +182,7 @@ Then use the `putExtra(String name, Parcelable value)` method of `Intent` to pas
 
 ### Q6. What is Implicit Intent? and what is explicit intent
 ##### Explicit Intent
-**Explicit intent** specifiy the component such as `Activity` and `Service` to start by *the fully-qualified class name*. Usually we start `Activity` or `Servcie` **explicity** in our-own app because we know the class name of them.
+**Explicit intent** specifies the component such as `Activity` and `Service` to start by *the fully-qualified class name*. Usually, we start `Activity` or `Service` **explicitly** in our own app because we know the class name of them.
 
 For example: 
 ```java
@@ -192,7 +192,7 @@ startActivity(intent);
 ```
 
 ##### Implicit Intent
-**Implicit Intent** do not specify the component by name, but instead declare a general action to perform, which allows a component fomr another app to handle it.
+**Implicit Intent** does not specify the component by name but instead declare a general action to perform, which allows a component from another app to handle it.
 
 For example: 
 ```java
@@ -207,7 +207,7 @@ if (intent.resolveActivity(getPackageManager()) != null) {
 ### Q7. What is ANR? When does ANR occur?
 ANR is the abbreviation of "**Application Not Responding**". An ANR occurs if an application cannot respond to user input event such as key press or screen touch event in 5 seconds or a `BroadcastReceiver` hasn't finished executing in 10 seconds.
 
-### Q8. Your photo-sharing app displays a system notification when the user receives a photo. Your app should display the photo when the user taps the notification. Which of the following do you need to attach to the Notification object that you pass to NotificationManager?  Please give a example code for this.
+### Q8. Your photo-sharing app displays a system notification when the user receives a photo. Your app should display the photo when the user taps the notification. Which of the following do you need to attach to the Notification object that you pass to NotificationManager?  Please give an example code for this.
 We should attach a `PendingIntent` instance to the `Notification` object. For example:
 ```java
 public final static String MESSAGE = "message";
@@ -242,8 +242,8 @@ notificationManager.notify(PHOTO_VIEW_NOTIFICATION_ID, builder.build());
 ```
 
 ### Q9. What is the nine-patch Image?
-A nine-path image is an image file with `.9` extension. For example: `dialog_bg.9.png`. The image itself is composed of the original image and **extra 1px-wide black line** around each edge of image(rectangle). The black line at *left* and *top* define the so-called **strechable patches**. Strechable patches is the area where the system automatically use to expand vertically/horizontally to adopt the size of widget. The black line at *right* and *bottom* define the optional content area. Content area define and limit the space where our can be rendered.
-The most straightforward use case of nine-patch image is the background of the comic or manga style dialogue in IM applications. Since we have no idea how much characters user will input, we use nine-patch image as background so that Android system will calculate the final size of the dialogue widget according to the characters user input and automatically adopt the strechable background according to the final size of the widget.
+A nine-path image is an image file with `.9` extension. For example: `dialog_bg.9.png`. The image itself is composed of the original image and **extra 1px-wide black line** around each edge of the image(rectangle). The black line at *left* and *top* define the so-called **stretchable patches**. Stretchable patches are the area where the system automatically use to expand vertically/horizontally of the image so that it adopt to the size of a widget. The black line at *right* and *bottom* define the optional content area. Content area defines and limits the space where our content such as text can be rendered.
+The most straightforward use case of a nine-patch image is the background of the comic or manga style dialogue in IM applications. Since we have no idea how much characters user will input, we use a nine-patch image as the background so that Android system will calculate the final size of the dialogue widget according to the characters user input and automatically adopt the stretchable background according to the final size of the widget.
 
 ### Q10. What is looper, message queue, and a Handler?
 `MessageQueue` is a low-level class which hold the list of `Message`s to be dispatched by a `Looper` within its associated thread. We can not access the thread's `MessageQueue` directly, instead we have to add `Message` through the `Handler` created on the same thread. We can take `Looper` as a `while` loop which is always `true` so that it never stop looping against its associated `MessageQueue` and dispatch `Message` object from `MessageQueue` to the `Handler` to consume it.
@@ -260,4 +260,4 @@ There are also two versions of methods which we could use to add messages to `Me
 
 We could also control our `Message` or `Runnable` object being processed as soon as the message queue is ready to do so, or specify a delay before it gets processed or absolute time for it to be processed.
 
-In a nut shell, `Looper`, `MessageQueue`, and `Handler` are classes design for multi-threading operation and communication in Android.
+In a nutshell, `Looper`, `MessageQueue`, and `Handler` are classes design for multi-threading operation and communication in Android.
