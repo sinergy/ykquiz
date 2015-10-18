@@ -1,6 +1,9 @@
-# Yahoo Kimo Android Quiz
+# Android Quiz
 
 ### Q1. What is a Content Provider? Please give a short example code to create, query, insert, update and delete your own content provider.
+Generally, an application can only access the data created by its own in Android for security concern. Apps cannot share data directly by using a share memory in Android. Android provides the mechanism `Content Provider` to allow app sharing its private data for other apps to access. `Content Provider` provides a standard interface that connects data in one process with code running in another process.
+
+Here is the link of the sample code of my custom `WeatherContentProvider` in one of my self-training project *Sunshine* created ~1 year ago on Github: [https://goo.gl/H6iJJW](https://goo.gl/H6iJJW). I have updated the Gradle version and made some modification according to the spec of API. You are welcome to clone and run it on your own device.
 
 ### Q2. What is Intent? Describe three common use cases for using an Intent.
 An `Intent` is a messaging object that we could use to request an action from another app component. Usually we use `Intent` to:
