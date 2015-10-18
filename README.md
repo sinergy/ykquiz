@@ -27,7 +27,7 @@ An `Intent` is a messaging object that we could use to request an action from an
 
 Say our app has an `SignUpActivity` to handle the process of member registration and the whole registration process has been split into 3 steps. Each step has been implemented by its corresponding `Fragment` class. When user finished the registration requirement of one step and went to the next step, we increased the `currentStep` member varaible by `1`. We save the value of `currentStep` in method `onSaveInstanceState(Bundle bundle)` and restore it in the method `onCreate(Bundle savedInstanceState)`. 
 
-Here we have another choice that we could restore the value of `currentStep` in the method `onRestoreInstanceState(Bundle savedInstanceState)`. Also, we could save the user's input of each step in `onSaveInstanceState` if we decide to use all these information as parameters of an API call at the final step of registration. By doing that, we help user keep values they input so that they have no need to input the same information again if the activity accidently destroyed because we could restore the values next time we retore this activity. However, what values(states) to save and when to restore them(`onCreate()` or `onRestoreInstanceState()`) are depends on the design of the application.
+Here we have another choice that we could restore the value of `currentStep` in the method `onRestoreInstanceState(Bundle savedInstanceState)`. Also, we could save the user's input of each step in `onSaveInstanceState` if we decide to use all these information as parameters of an API call at the final step of registration. By doing that, we help user keep values they input so that they have no need to input the same information again if the activity accidently destroyed because we could restore the values next time we retore this activity. However, what values (states) to save and when to restore (`onCreate()` or `onRestoreInstanceState()`) are depends on the design of the application.
 
 ```java
 public class SingUpActivity extends AppCompatActivity {
@@ -243,3 +243,18 @@ A nine-path image is an image file with `.9` extension. For example: `dialog_bg.
 The most straightforward use case of nine-patch image is the background of the comic or manga style dialogue in IM applications. Since we have no idea how much characters user will input, we use nine-patch image as background so that Android system will calculate the final size of the dialogue widget according to the characters user input and automatically adopt the strechable background according to the final size of the widget.
 
 ### Q10. What is looper, message queue, and a Handler?
+`MessageQueue` is a low-level class which hold the list of `Message`s to be dispatched by a `Looper` within its associated thread. We can not access the thread's `MessageQueue` directly, instead we have to add `Message` through the `Handler` created on the same thread. We can take `Looper` as a `while` loop which is always `true` so that it never stop looping against its associated `MessageQueue` and dispatch `Message` object from `MessageQueue` to the `Handler` to consume it.
+
+There are two main uses for a `Handler`: 
+
+1. to schedule messages and runnables to be executed as some point in the future
+2. to enqueue an action to be performed on a different thread than your own.
+
+There are also two versions of methods which we could use to add messages to `MessageQueue`.
+
+* The *post* version of methods such as `post(Runnable)`, `postDelayed(Runnable, long)` and so on let us enqueue `Runnable` objects to be called by the `MessageQueue` when they are received.
+* The *send* version of methods such as `sendMessage(Message)`, `sendMessageDelayed(Message, long)` and so on let us enqueue a `Message` object which contains a bundle of data that will be processed by the `Handler`'s `handleMessage(Message)` method.
+
+We could also control our `Message` or `Runnable` object being processed as soon as the message queue is ready to do so, or specify a delay before it gets processed or absolute time for it to be processed.
+
+In a nut shell, `Looper`, `MessageQueue`, and `Handler` are classes design for multi-threading operation and communication in Android.
