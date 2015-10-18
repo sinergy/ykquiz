@@ -150,6 +150,7 @@ ANR is the abbreviation of "**Application Not Responding**". An ANR occurs if an
 We should attach a `PendingIntent` instance to the `Notification` object.
 
 ### Q9. What is the nine-patch Image?
-A nine-path image is an image file with `.9` extension. For example: `dialog_bg.9.png`. The image itself is composed of the original image and **extra 1px-wide black line** around each of the edge of image(rectangle).
+A nine-path image is an image file with `.9` extension. For example: `dialog_bg.9.png`. The image itself is composed of the original image and **extra 1px-wide black line** around each edge of image(rectangle). The black line at *left* and *top* define the so-called **strechable patches**. Strechable patches is the area where the system automatically use to expand vertically/horizontally to adopt the size of widget. The black line at *right* and *bottom* define the optional content area. Content area define and limit the space where our can be rendered.
+The most straightforward use case of nine-patch image is the background of the comic or manga style dialogue in IM applications. Since we have no idea how much characters user will input, we use nine-patch image as background so that Android system will calculate the final size of the dialogue widget according to the characters user input and automatically adopt the strechable background according to the final size of the widget.
 
 ### Q10. What is looper, message queue, and a Handler?
